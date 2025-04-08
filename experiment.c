@@ -63,6 +63,148 @@ int main(int argc, char *argv[]){
   }
 
   // TODO: Start writing code here and can define variables for functions above
+  
+  // Question 7
+  
+  // Page 9
+  i = pagesize * 8;
+  *(p + i) = 'E';
+  *(p + (i + 1)) = 'v';
+  *(p + (i + 2)) = 'a';
+  *(p + (i + 3)) = 'n';
+
+  printf("First 4 bytes of page 9 (%lx): ", p + (pagesize * 8));
+  for (i = pagesize * 8; i < (pagesize * 8 + 4); i++) {
+    printf("%c", *(p + i));
+  }
+  printf("\n");
+
+  // Page 10
+  i = pagesize * 9;
+  *(p + i) = 'E';
+  *(p + (i + 1)) = 'v';
+  *(p + (i + 2)) = 'a';
+  *(p + (i + 3)) = 'n';
+
+  printf("First 4 bytes of page 10 (%lx): ", p + (pagesize * 9));
+  for (i = pagesize * 9; i < (pagesize * 9 + 4); i++) {
+    printf("%c", *(p + i));
+  }
+  printf("\n");
+
+
+  // Question 8
+  // Protect 7 and 8
+  if (mprotect(p + pagesize * 6, pagesize, PROT_READ | PROT_WRITE) == -1){
+    handle_error("mprotect");
+  }
+  if (mprotect(p + pagesize * 7, pagesize, PROT_READ | PROT_WRITE) == -1){
+    handle_error("mprotect");
+  }
+
+  i = pagesize * 6;
+  *(p + i) = 'M';
+  *(p + (i + 1)) = 'i';
+  *(p + (i + 2)) = 'l';
+  *(p + (i + 3)) = 'l';
+  *(p + (i + 4)) = 'e';
+  *(p + (i + 5)) = 'r';
+
+  i = pagesize * 7;
+  *(p + i) = 'M';
+  *(p + (i + 1)) = 'i';
+  *(p + (i + 2)) = 'l';
+  *(p + (i + 3)) = 'l';
+  *(p + (i + 4)) = 'e';
+  *(p + (i + 5)) = 'r';
+
+  printf("First 6 bytes of page 7 (%lx): ", p + (pagesize * 6));
+  for (i = pagesize * 6; i < (pagesize * 6 + 6); i++) {
+    printf("%c", *(p + i));
+  }
+  printf("\n");
+
+  printf("First 6 bytes of page 8 (%lx): ", p + (pagesize * 7));
+  for (i = pagesize * 7; i < (pagesize * 7 + 6); i++) {
+    printf("%c", *(p + i));
+  }
+  printf("\n");
+
+
+  // Question 9
+  // Protect 5 and 6
+  if (mprotect(p + pagesize * 4, pagesize, PROT_WRITE) == -1){
+    handle_error("mprotect");
+  }
+  if (mprotect(p + pagesize * 5, pagesize, PROT_WRITE) == -1){
+    handle_error("mprotect");
+  }
+
+  i = pagesize * 4;
+  *(p + i) = 'e';
+  *(p + (i + 1)) = 'm';
+  *(p + (i + 2)) = 'm';
+  *(p + (i + 3)) = '4';
+  *(p + (i + 4)) = '5';
+
+  i = pagesize * 5;
+  *(p + i) = 'e';
+  *(p + (i + 1)) = 'm';
+  *(p + (i + 2)) = 'm';
+  *(p + (i + 3)) = '4';
+  *(p + (i + 4)) = '5';
+
+  printf("First 5 bytes of page 5 (%lx): ", p + (pagesize * 4));
+  for (i = pagesize * 4; i < (pagesize * 4 + 5); i++) {
+    printf("%c", *(p + i));
+  }
+  printf("\n");
+
+  printf("First 5 bytes of page 6 (%lx): ", p + (pagesize * 5));
+  for (i = pagesize * 5; i < (pagesize * 5 + 5); i++) {
+    printf("%c", *(p + i));
+  }
+  printf("\n");
+
+
+  // Question 10
+  // Copy
+  char *buffer2 = memalign(pagesize, pagesize * 2);
+  if (buffer2 == NULL)
+    handle_error("memalign");
+
+  memcpy(buffer2, p + pagesize * 6, pagesize * 2);
+
+  printf("First 6 bytes of new page 1 (%lx): ", buffer2);
+  for (i = 0; i < 6; i++) {
+    printf("%c", *(buffer2 + i));
+  }
+  printf("\n");
+
+  printf("First 6 bytes of new page 2 (%lx): ", (buffer2 + pagesize));
+  for (i = pagesize; i < pagesize + 6; i++) {
+    printf("%c", *(buffer2 + i));
+  }
+  printf("\n");
+
+
+  // Question 11
+  // Copy 6
+  memcpy(buffer2, p + pagesize * 5, pagesize);
+  // Copy 9
+  memcpy(buffer2 + pagesize, p + pagesize * 8, pagesize);
+
+  printf("First 6 bytes of new page 1 (%lx): ", buffer2);
+  for (i = 0; i < 6; i++) {
+    printf("%c", *(buffer2 + i));
+  }
+  printf("\n");
+
+  printf("First 6 bytes of new page 2 (%lx): ", (buffer2 + pagesize));
+  for (i = pagesize; i < pagesize + 6; i++) {
+    printf("%c", *(buffer2 + i));
+  }
+  printf("\n");
 
   exit(EXIT_SUCCESS);
 }
